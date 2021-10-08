@@ -11,64 +11,84 @@ def letter_card_values(card, vals):
     else:
         vals.append(int(card))
 
-# Show dealt hand
-def show_hand(cards, vals):
-    print("Your hand: " + ", ".join(str(card) for card in cards))
+# Show participant's dealt hand
+def show_hand(name, cards, vals):
+    print(name + " hand: " + ", ".join(str(card) for card in cards))
     print("Card value total = " + str(sum(vals)) + "\n")
 
-# Assuming multiple decks in play
+# Check if cards make blackjack
+def check_blackjack(vals):
+    if sum(vals) == 21:
+        print("You win!")
+
+# Assuming multiple decks of cards in play
 deck = ['A','2','3','4','5','6','7','8','9','10','J','Q','K']
-player_vals = []
-dealer_vals = []
 
 # Start game
 print("\n-------------------------------------")
 print("              Blackjack")
 print("-------------------------------------\n")
 
-# Pick player's first two cards and get values
-cards = [random.choice(deck)]
-cards.append(random.choice(deck))
+# Declare player's deck, pick first two cards, and get values
+player_cards = [random.choice(deck)]
+player_cards.append(random.choice(deck))
+player_vals = []
+for card in player_cards:
+    letter_card_values(card, player_vals)
 
-letter_card_values(cards[0], player_vals)
-letter_card_values(cards[1], player_vals)
+# Declare dealer's deck, pick first two cards, and get values
+dealer_cards = [random.choice(deck)]
+dealer_cards.append(random.choice(deck))
+#dealer_cards = ['2','3']
+dealer_vals = []
+for card in dealer_cards:
+    letter_card_values(card, dealer_vals)
 
-# Pick dealer's first two cards and get values
-dealer = [random.choice(deck)]
-dealer.append(random.choice(deck))
-
-letter_card_values(dealer[0], dealer_vals)
-letter_card_values(dealer[1], dealer_vals)
-
-# Show one of dealer's cards
-print("Dealer's hand: " + dealer[0] + ", *\n")
+# Show one of dealer's cards, obscure the other
+print("Dealer's hand: " + dealer_cards[0] + ", *")
 
 # Show user their current hand and check if hit blackjack
-show_hand(cards, player_vals)
-if sum(player_vals) == 21:
-    print("You win!")
+show_hand("Your", player_cards, player_vals)
+check_blackjack(player_vals)
 
+# Prompt user to hit or stay
 hit_or_stay = input("(H)it or (S)tay? ")
 
+# Each time user hits, provide a new card if card value total is less than 21
+# Game won if 21 reached, game over if player's card total is over 21
 while hit_or_stay.upper() == "H":
-    cards.append(random.choice(deck))
+    player_cards.append(random.choice(deck))
 
-    letter_card_values(cards[-1], player_vals)
+    letter_card_values(player_cards[-1], player_vals)
+   
+    show_hand("Your", player_cards, player_vals)
 
-    show_hand(cards, player_vals)
-
-    if sum(player_vals) == 21:
-        print("You win!")
+    if check_blackjack(player_vals):
         break
     elif sum(player_vals) > 21:
-        print("You bust!")
+        print("You bust!\n")
         break
     else:
         hit_or_stay = input("(H)it or (S)tay? ")
-        
-while sum(dealer_vals) < 17:
-    print("Dealer's hand: " + ", ".join(str(card) for card in dealer))
-    dealer.append(random.choice(deck))
-    letter_card_values(dealer[-1], dealer_vals)
-    # infinite loop right now
-    print("Dealer card value total: " + str(sum(dealer_vals))) 
+
+# When user stays, dealer takes cards while dealer card total is less than 17
+# Once 17 is hit or exceeded, compare dealer's cards to player's and determine winner
+dealer_hit = True
+if hit_or_stay.upper() == "S":
+    while dealer_hit:
+        show_hand("Dealer's", dealer_cards, dealer_vals)
+        if sum(dealer_vals) < 17:
+            dealer_cards.append(random.choice(deck))
+            letter_card_values(dealer_cards[-1], dealer_vals)
+            continue
+        elif sum(dealer_vals) == 21:
+            print("Dealer has blackjack! Better luck next time!")        
+        elif sum(dealer_vals) > 21:
+            print("Dealer busts! You win!")
+        elif sum(dealer_vals) > sum(player_vals):
+            print("Dealer wins!")
+        elif sum(dealer_vals) == sum(player_vals):
+            print("Push! No winner.")
+        else:
+            print("You win!")
+        dealer_hit = False

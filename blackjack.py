@@ -54,6 +54,7 @@ while play_again.lower() == "y":
 
     # Prompt user to hit or stay
     hit_or_stay = input("Hit or Stay? (h/s)\n:")
+    # Check if user picked "hit" or "stay", if not, clarify options and prompt again
     while hit_or_stay.lower() != "h" and hit_or_stay.lower() != "s":
         hit_or_stay = input("Options are 'h' for hit or 's' for Stay\n:")
         if hit_or_stay.lower == "h" or hit_or_stay.lower() == "s":

@@ -20,6 +20,17 @@ def show_hand(name, cards, vals):
 def check_blackjack(vals):
     if sum(vals) == 21:
         print("You win!")
+        return True
+
+# Check if user picked "hit" or "stay", if not, clarify options and prompt again
+def check_input(hit_or_stay):
+    if hit_or_stay.lower() != "h" and hit_or_stay.lower() != "s":
+        while hit_or_stay.lower() != "h" and hit_or_stay.lower() != "s":
+            hit_or_stay = input("Options are 'h' for Hit or 's' for Stay\n:")
+            if hit_or_stay.lower() == "h" or hit_or_stay.lower() == "s":
+                return hit_or_stay
+    else:
+        return hit_or_stay
 
 # Assuming multiple decks of cards in play
 deck = ['A','2','3','4','5','6','7','8','9','10','J','Q','K']
@@ -46,20 +57,21 @@ while play_again.lower() == "y":
         letter_card_values(card, dealer_vals)
 
     # Show one of dealer's cards, obscure the other
-    print("Dealer's hand: " + dealer_cards[0] + ", *\n")
+    print("Dealer's hand: " + dealer_cards[0] + ", *")
 
     # Show user their current hand and check if hit blackjack
+    # If blackjack, ask user to play again
     show_hand("Your", player_cards, player_vals)
     if check_blackjack(player_vals):
-        break
-
-    # Prompt user to hit or stay
-    hit_or_stay = input("\nHit or Stay? (h/s)\n:")
-    # Check if user picked "hit" or "stay", if not, clarify options and prompt again
-    while hit_or_stay.lower() != "h" and hit_or_stay.lower() != "s":
-        hit_or_stay = input("Options are 'h' for hit or 's' for Stay\n:")
-        if hit_or_stay.lower == "h" or hit_or_stay.lower() == "s":
+        play_again = input("\nPlay again? (y/n)\n:")
+        if play_again == "y":
+            continue
+        else:
             break
+
+    # Prompt user to hit or stay and check input
+    hit_or_stay = input("\nHit or Stay? (h/s)\n:")
+    hit_or_stay = check_input(hit_or_stay)
 
     # Each time user hits, provide a new card if card value total is less than 21
     # Game won if 21 reached, game over if player's card total is over 21
@@ -72,18 +84,15 @@ while play_again.lower() == "y":
 
         if sum(player_vals) == 21:
             print("\nBlackjack! You win!\n")
-            play_again = input("Play again? (y/n)\n:")
+            #play_again = input("Play again? (y/n)\n:")
             break
         elif sum(player_vals) > 21:
             print("\nYou bust!\n")
-            play_again = input("Play again? (y/n)\n:")
+            #play_again = input("Play again? (y/n)\n:")
             break
         else:
             hit_or_stay = input("\nHit or Stay? (h/s)\n:")
-            while hit_or_stay.lower() != "h" and hit_or_stay.lower() != "s":
-                hit_or_stay = input("Options are 'h' for hit or 's' for Stay\n:")
-                if hit_or_stay.lower == "h" or hit_or_stay.lower() == "s":
-                    break
+            hit_or_stay = check_input(hit_or_stay)
 
     # When user stays, dealer takes cards while dealer card total is less than 17
     # Once 17 is hit or exceeded, compare dealer's cards to player's and determine winner
@@ -97,17 +106,19 @@ while play_again.lower() == "y":
                 continue
             elif sum(dealer_vals) == 21:
                 print("\nDealer has blackjack! Better luck next time!")
-                play_again = input("\nPlay again? (y/n)\n:")        
+                #play_again = input("\nPlay again? (y/n)\n:")        
             elif sum(dealer_vals) > 21:
                 print("\nDealer busts! You win!")
-                play_again = input("\nPlay again? (y/n)\n:")
+                #play_again = input("\nPlay again? (y/n)\n:")
             elif sum(dealer_vals) > sum(player_vals):
                 print("\nDealer wins!")
-                play_again = input("\nPlay again? (y/n)\n:")
+                #play_again = input("\nPlay again? (y/n)\n:")
             elif sum(dealer_vals) == sum(player_vals):
                 print("\nPush! No winner.")
-                play_again = input("\nPlay again? (y/n)\n:")
+                #play_again = input("\nPlay again? (y/n)\n:")
             else:
                 print("\nYou win!")
-                play_again = input("\nPlay again? (y/n)\n:")
+                #play_again = input("\nPlay again? (y/n)\n:")
             dealer_hit = False
+    # Ask user if they want to play again
+    play_again = input("\nPlay again? (y/n)\n:")

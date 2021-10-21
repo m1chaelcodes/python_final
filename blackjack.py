@@ -16,10 +16,10 @@ def show_hand(name, cards, vals):
     print("\n" + name + " hand: " + ", ".join(str(card) for card in cards))
     print("Card value total = " + str(sum(vals)))
 
-# Check if cards make blackjack
+# Check if user's cards make blackjack
 def check_blackjack(vals):
     if sum(vals) == 21:
-        print("You win!")
+        print("Blackjack! You win!")
         return True
 
 # Check if user picked "hit" or "stay", if not, clarify options and prompt again
@@ -82,13 +82,10 @@ while play_again.lower() == "y":
     
         show_hand("Your", player_cards, player_vals)
 
-        if sum(player_vals) == 21:
-            print("\nBlackjack! You win!\n")
-            #play_again = input("Play again? (y/n)\n:")
+        if check_blackjack(player_vals):
             break
         elif sum(player_vals) > 21:
             print("\nYou bust!\n")
-            #play_again = input("Play again? (y/n)\n:")
             break
         else:
             hit_or_stay = input("\nHit or Stay? (h/s)\n:")
@@ -105,20 +102,16 @@ while play_again.lower() == "y":
                 letter_card_values(dealer_cards[-1], dealer_vals)
                 continue
             elif sum(dealer_vals) == 21:
-                print("\nDealer has blackjack! Better luck next time!")
-                #play_again = input("\nPlay again? (y/n)\n:")        
+                print("\nDealer has blackjack! Better luck next time!")       
             elif sum(dealer_vals) > 21:
                 print("\nDealer busts! You win!")
-                #play_again = input("\nPlay again? (y/n)\n:")
             elif sum(dealer_vals) > sum(player_vals):
                 print("\nDealer wins!")
-                #play_again = input("\nPlay again? (y/n)\n:")
             elif sum(dealer_vals) == sum(player_vals):
                 print("\nPush! No winner.")
-                #play_again = input("\nPlay again? (y/n)\n:")
             else:
                 print("\nYou win!")
-                #play_again = input("\nPlay again? (y/n)\n:")
             dealer_hit = False
+
     # Ask user if they want to play again
     play_again = input("\nPlay again? (y/n)\n:")

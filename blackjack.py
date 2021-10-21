@@ -13,6 +13,14 @@ def letter_card_values(card, vals):
 
 # Show participant's dealt hand
 def show_hand(name, cards, vals):
+    print(" ----------")
+    print("|          |")
+    print("|          |")
+    print("|          |")
+    print("|          |")
+    print("|          |")
+    print("|          |")
+    print(" ----------")
     print("\n" + name + " hand: " + ", ".join(str(card) for card in cards))
     print("Card value total = " + str(sum(vals)))
 
